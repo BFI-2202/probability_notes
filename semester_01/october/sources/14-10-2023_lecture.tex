@@ -1,0 +1,219 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{geometry}
+\geometry{
+    left=1cm,right=1cm,top=2cm,bottom=2cm
+}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\newtheorem{definition}{Определение}
+\newtheorem{theorem}{Теорема}
+
+\DeclareMathOperator{\sign}{sign}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black
+}
+
+\title{Теория принятия решений}
+\author{Лисид Лаконский}
+\date{October 2023}
+
+\begin{document}
+\raggedright
+
+\maketitle
+
+\tableofcontents
+\pagebreak
+
+\section{Лекция — 14.10.2023}
+
+\subsection{Асимптотические формулы}
+
+\subsubsection{Локальная теорема Муавра–Лапласа}
+
+Если вероятность наступления события $A$ в $n$ независимых испытаниях постоянна и равна $p$, причем $n \rightarrow \infty$, то справедливо следующее соотношение:
+
+$$
+\frac{\sqrt{n p q} P_n (k)}{\sqrt{2 n} e^{-\frac{x^2}{2}}} \rightarrow 1
+$$
+
+где $x = \frac{k - n p}{\sqrt{n p q}}$ (при $n \to \infty$)
+
+Из этого следует:
+
+$$
+P_{n}(k) \approx \frac{1}{\sqrt{n p q}} * \frac{1}{\sqrt{2 n}} e^{-\frac{x^2}{2}}
+$$
+
+Можем записать следующим образом:
+
+$$\phi(x) = \frac{1}{\sqrt{2 n}} e^{-\frac{x^2}{2}}$$
+
+$$P_n(k) = \frac{1}{\sqrt{npq}} \phi(x)$$
+
+\paragraph{Свойства}
+
+\begin{enumerate}
+    \item $\phi(x) > 0$
+    \item $\phi(-x) = \phi(x)$
+    \item $|x| \ge 4 \implies \phi(x) \approx 0$
+\end{enumerate}
+
+\paragraph{Пример №1}
+
+$P_{110}(58) \approx \dots$
+
+$x = \frac{58 - 110 * 0.4}{\sqrt{110 * 0.4 * 0.61}} = \frac{14}{5.14} \approx 2.72$
+
+$\dots \approx \frac{1}{5.14} \phi(2.72) \approx \frac{0.0099}{5.14} \approx 0.001926$
+
+Погрешность: $\frac{0.002025 - 0.001926}{0.002025} \approx 0.00489 \approx 5\%$
+
+\textbf{Ответ:} $0.001926$
+
+\paragraph{Пример №2}
+
+$p = 0.1$, $P_{8}(3) = \dots$
+
+$\dots = C_{8}^{3} * 0.1^3 * 0.9^5 \approx 0.033$
+
+Теперь посчитаем по нашей новоизученной формуле:
+
+$x = \frac{3 - 8 * 0.1}{\sqrt{8 * 0.1 * 0.9}} = \frac{2.2}{0.85} \approx 2.59$
+
+$\dots = \frac{1}{0.85} \phi(2.59) = \frac{0.0139}{0.85} \approx 0.016$
+
+Погрешность: $\frac{0.033 - 0.016}{0.033} \approx 0.515 \approx 51\%$
+
+\textbf{Ответ:} 0.033
+
+\subsubsection{Теорема Пуассона}
+
+Если вероятность наступления события $A$ в $n$ независимых испытаниях постоянна и равна $p$, причем $n \rightarrow \infty$, $p \to 0$, $np \to \lambda$, тогда вероятность наступления $k$ успехов в $n$ испытаниях:
+
+$$P_n(k) \to \frac{\lambda^k}{k!} e^{-\lambda}$$
+
+где $k = np$
+
+\textbf{Доказательство:}
+
+$P_{n}(k) = C_{n}^{k} p^{k} q^{n - k}$
+
+$p = \frac{\lambda}{n} \implies$
+
+$P_{n}(k) = \frac{n!}{k!(n-k!)} (\frac{\lambda}{n})^{k} * (1 - \frac{\lambda}{n})^{n - k} = \frac{\lambda^{k}}{k!} * \frac{n - (k - 1) \dots (n - 1)}{n^{k - 1}} (1 - \frac{\lambda}{n})^{n - k} = \frac{\lambda^{k}}{k!} * \frac{n - (k - 1)}{n} \dots \frac{n - 1}{n} (1 - \frac{\lambda}{n})^{n - k} = \frac{\lambda^{k}}{n} e^{-\lambda}$
+
+\paragraph{Пример №1}
+
+Вероятность брака на заводе кожаных изделий составляет $p = 0.01$ Найти вероятность того, что в произведенной партии из $n = 100$ изделий не более 1 бракованного.
+
+\textbf{Решение:}
+
+$P = P_{100}(0) + P_{100}(1)$
+
+$\lambda = np = 1$
+
+$P = \frac{1^{0}}{0^{1}} e^{-1} + \frac{1}{1^1} e^{-1} = 2e^{-1} = \frac{2}{e} \approx 0.74$
+
+\textbf{Ответ:} 0.736
+
+\subsection{Поток событий}
+
+\begin{definition}
+    \textbf{Поток событий} — последовательность событий, которые наступают в случайные моменты времени
+\end{definition}
+
+\subsubsection{Свойства}
+
+\begin{enumerate}
+    \item Свойство стационарности: вероятность появления $k$ событий на любом промежутке времени зависит только от числа $k$ и от длительности $t$ промежутка и не зависит от начала его отсчёта.
+    \item Свойство ординарности: вероятностью наступления за элементарный промежуток времени более одного события можно пренебречь по сравнению с вероятностью наступления за этот промежуток не более одного события (то есть вероятность одновременного появления двух и более событий равна нулю)
+    \item Свойство отсутствия последействия: вероятность появления $k$ событий на любом промежутке времени не зависит от того, появлялись или не появлялись события в моменты времени, предшествующие началу рассматриваемого промежутка.
+\end{enumerate}
+
+\subsubsection{Виды}
+
+\begin{definition}
+    \textbf{Простейший (стационарный пуассоновский) поток} — поток событий, обладающий свойствами стационарности, ординарности и отсутствия последествия.
+\end{definition}
+
+\begin{definition}
+    \textbf{Интенсивность потока} ($\lambda$) — среднее число событий, которые появляются в единицу времени.
+\end{definition}
+
+Если постоянная интенсивность потока известна, то вероятность появления $k$ событий простейшего потока за время длительностью $t$ определяется формулой Пуассона:
+
+$$
+P_{t}(k) = \frac{(\lambda t)^{k} e^{-\lambda t}}{k!}
+$$
+
+\subsection{Интегральная теорема Муавра–Лапласа}
+
+Если вероятность наступления события $A$ в $n$ независимых испытаниях постоянна и равна $p$, то вероятность того, что в $n$ независимых испытаниях успех наступит в интервале от $k_1$ до $k_2$ при $n \to \infty$ имеет своим пределом:
+
+$$
+\frac{1}{\sqrt{2n}} \int\limits_{x_1}^{x_2} e^{-\frac{t^2}{2}} \diff t = \int\limits_{x_1}^{x_2} \phi(x) \diff x
+$$
+
+
+где $x_1 = \frac{k_1 - np}{\sqrt{npq}}$, $x_2 = \frac{k_2 - np}{\sqrt{npq}}$
+
+\paragraph{Нормированная функция Лапласа}
+
+$$\Phi_{0}(t) = \int\limits_{0}^{t} \phi^{-\frac{x^2}{2}} \diff x$$
+
+\textbf{Свойства}:
+
+\begin{enumerate}
+    \item $\Phi_0(x) = -\Phi_0(x)$
+    \item $\Phi_0(x) \uparrow \uparrow$
+    \item Если $|x| \ge 5 \implies |\Phi_0(x)| = 0.5$ 
+\end{enumerate}
+
+Имеем:
+
+$$P_{n}(k_1; k_2) = \int\limits_{x_1}^{x_2} \Phi(x) \diff x = \int\limits_{x_1}^{0} \Phi(x) \diff x + \int\limits_{0}^{x_2} \Phi(x) \diff x = -\Phi_0(x_1) + \Phi_0(x_2)$$
+
+\paragraph{Функция Лапласа}
+
+$$
+\Phi(x) = \frac{1}{\sqrt{2n}} \int\limits_{-\infty}^{x} e^{-\frac{t^2}{2}} \diff t
+$$
+
+$$
+\Phi(x) = \frac{1}{2} + \Phi_{0}^{-\infty}(x)
+$$
+
+$$
+\Phi(-x) + \Phi(x) = 1
+$$
+
+Использование данной интегральной функции дает очень хорошее приближение когда $n$ большое, $p$ не маленькое, $npq > 10$
+
+\subsection{Отклонение относительной частоты}
+
+$P(|\frac{k}{n} - p| \le \epsilon) - ?$
+
+$P(np - n \epsilon < k < np + n \epsilon) = \dots$
+
+$x_1 = -\epsilon \sqrt{\frac{n}{pq}}$, $x_2 = \epsilon \sqrt{\frac{n}{pq}}$
+
+$\dots = \frac{1}{\sqrt{2 n}} \int\limits_{-\epsilon \sqrt{\frac{n}{pq}}}^{\epsilon \sqrt{\frac{n}{pq}}} e^{-\frac{x^2}{2}} \diff x = \frac{2}{\sqrt{2n}} \int\limits_{0}^{\epsilon \sqrt{\frac{n}{pq}}} e^{-\frac{x^2}{2}} \diff x = 2 \Phi_0 (\epsilon \sqrt{\frac{n}{pq}})$
+
+$$
+P(|\frac{k}{n} - p| \le \epsilon) = 2 \Phi_0 (\epsilon \sqrt{\frac{n}{pq}})
+$$
+
+
+\end{document}

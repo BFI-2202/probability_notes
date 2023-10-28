@@ -1,0 +1,256 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{geometry}
+\usepackage{multicol}
+\geometry{
+    left=1cm,right=1cm,top=2cm,bottom=2cm
+}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\newtheorem{definition}{Определение}
+\newtheorem{theorem}{Теорема}
+
+\DeclareMathOperator{\sign}{sign}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black
+}
+
+\title{Теория принятия решений}
+\author{Лисид Лаконский}
+\date{October 2023}
+
+\begin{document}
+\raggedright
+
+\maketitle
+
+\tableofcontents
+\pagebreak
+
+\section{Лекция — 28.10.2023}
+
+\subsection{Дискретные случайные величины}
+
+\subsubsection{Биномиальное распределение}
+
+$P_n(k) = C_n^K p^k q^{n - k}$
+
+\textbf{Закон биномиального распределения}:
+
+$$
+\begin{pmatrix}
+  x & 0 & 1 & \dots & k & & n \\
+  p & q^{n} & n p q^{n - 1} & & C_n^k p^k q^{n - k} & & p^n
+\end{pmatrix}
+$$
+
+$$
+F(x) = \begin{cases}
+    0, \ x \le 0 \\
+    \sum\limits_{k} C_{n}^{k} p^{k} q^{n - k}, \ 0 < x \le n \\
+    1, \ x > n
+\end{cases}
+$$
+
+\textbf{Параметры}: $n$, $p$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}:
+    $M(x) = np$
+    \item \textbf{Дисперсия}:
+    $D(x) = n(1-p)p$
+\end{enumerate}
+
+Если $np \in Z$, то это будет \textbf{наивероятнейшее число успешных испытаний}.
+
+\subsubsection{Пуассоновское распределение}
+
+Если $n \to \infty$, $p \to 0$, $P_n(k) = \frac{\lambda^k}{k!} e^{-\lambda}$, где $\lambda = np$.
+
+\textbf{Закон Пуассоновского распределения}:
+
+$$
+\begin{pmatrix}
+  x & 0 & 1 & \dots & k & & n \\
+  p & e^{-\lambda} & \lambda e^{-\lambda} & & \frac{\lambda^{k}}{k!} e^{-\lambda} & & \frac{\lambda^{n}}{n!} e^{-\lambda}
+\end{pmatrix}
+$$
+
+\textbf{Параметры}: $\lambda$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}:
+    $M(x) = \sum\limits_{k = 0}^{\infty} k \frac{\lambda^{k}}{k!} e^{-\lambda} = \sum\limits_{k = 1}^{\infty} k \frac{\lambda^{k}}{k!} e^{-\lambda} = \lambda e^{-\lambda} \sum\limits_{k = 1}^{\infty} \frac{\lambda^{k - 1}}{(k - 1)!} = \lambda e^{-\lambda} \sum\limits_{k = 0}^{\infty} \frac{\lambda^{k}}{k!} = \lambda e^{-\lambda} e^{\lambda} = \lambda$
+    \item \textbf{Дисперсия}:
+    $D(x) = M(x^2) - (M(x)^2)=\dots=\lambda$
+\end{enumerate}
+
+\subsubsection{Геометрическое распределение}
+
+Рассматривается серия $n$ независимых испытаний, в которых успех появляется с одинаковой вероятностью $p$ и эти испытания \textbf{заканчиваются как только наступает успех}: $P_{k} = (1-p)p^{k - 1}$
+
+\textbf{Закон геометрического распределения}:
+
+$$
+\begin{pmatrix}
+    x & 1 & 2 & \dots & k \\
+    p & p & (1-p)p & \dots & (1-p)^{k - 1}p
+\end{pmatrix}
+$$
+
+\textbf{Параметры}: $p$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}: $M(x) = \frac{1}{p}$
+    \item \textbf{Дисперсия}: $D(x) = \frac{1-p}{p^2}$
+\end{enumerate}
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1}
+
+Вероятность того, что электроприбор откажет — 0.15. Сколько часов в среднем прибор отрабатывает до первого сбоя?
+
+\textbf{Ответ}: $M(X) = \frac{1}{0.15} \approx 6.67$ (часов)
+
+\subsection{Непрерывные случайные величины}
+
+\begin{definition}
+    \textbf{Случайная величина $X$ называется непрерывной}, если её функция распределения $F(x)$ является непрерывной.
+\end{definition}
+
+\begin{definition}
+    \textbf{Вероятность того, что случайная величина $X$ примет значение из промежутка} $[a; b)$ равняется приращению функции распределения на этом промежутке:
+
+    $$
+        P(a \le X < b) = F(b) - F(a)
+    $$
+\end{definition}
+
+\subsubsection{Плотность распределения}
+
+\begin{definition}
+    \textbf{Плотностью распределения вероятностей непрерывной случайной величины} называется первая производная её функции распределения, то есть
+
+    $$f(x) = F'(x)$$
+\end{definition}
+
+\paragraph{Свойства плотности распределения}
+
+\begin{enumerate}
+    \item \textbf{Плотность распределения неотрицательная функция}, то есть
+    
+    $$\forall x \in (-\infty; \infty) f(x) > 0$$
+    \item \textbf{Вероятность того, что случайная величина примет какое-либо значение, равняется единице}: 
+    
+    $$\int\limits_{-\infty}^{\infty} f(x) \diff x = 1$$
+    \item $\lim\limits_{x \to \pm \infty} f(x) = 0$
+\end{enumerate}
+
+\paragraph{Пример №1}
+
+Пусть $f(x) = c \arctg x$. При каком $c$ $f(x)$ будет являться плотностью распределения? Рассмотрим $\lim\limits_{x \to \pm \infty} c \arctg x = \pm \frac{c \pi}{2}$. Чтобы это выражение было равно нулю, $c$ должно быть равно нулю. Но интеграл единице ни при каком $c$ не будет равняться. \textbf{Следовательно, $f(x)$ ни при каком $c$ не будет плотностью распределения}.
+
+\subsubsection{Функция распределения}
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item $F'(x) = f(x)$
+        \item $F(x) = \int\limits_{\infty}^{x} f(t) \diff t$
+        \item $\lim\limits_{x \to -\infty} F(x) = 0$
+        \item $\lim\limits_{x \to +\infty} F(x) = 1$
+    \end{enumerate}        
+\end{multicols}
+
+Из этих свойств следует:
+
+$$
+P(\alpha < x < \beta) = F(\beta) - F(\alpha)
+$$
+
+\paragraph{Пример №1}
+
+Найти плотность распредления непрерывной случайной величины, если
+
+$$
+F(x) = \begin{cases}
+    0, \ x \le 0 \\
+    x^2, \ x \in (0; 1] \\
+    1, \ x > 1
+\end{cases}
+$$
+
+Просто, по определению, найдем производные:
+
+$$
+f(x) = \begin{cases}
+  0, \ x \le 0 \\
+  2x, \ x \in (0; 1] \\
+  0, x > 1  
+\end{cases}
+$$
+
+\subsubsection{Числовые характеристики}
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}: $M(x) = \int\limits_{-\infty}^{+\infty} x f(x) \diff x$
+    \item \textbf{Дисперсия}: $D(x) = \int\limits_{-\infty}^{+\infty} (x - M(x))^2 f(x) \diff x$. Но не забываем про то, что мы все так же можем считать по формуле: $D(x) = M(x^2) - M(x)^2$, где $M(x^2) = \int\limits_{-\infty}^{\infty} x^2 f(x) \diff x$
+    \item \textbf{Среднеквадратическое отклонение}: $\sigma(x) = \sqrt{D(x)}$
+    \item \textbf{Модой непрерывной величины} называют то ее значение, которому соответствует максимальное значение функции плотности.
+    \item \textbf{Медианой непрерывной величины} называется её значение, при котором имеет место равенство
+    
+    $$P(X < M_{e}) = P(X > M_{e})$$
+
+    \textbf{Оптимальное свойство медианы}. Сумма произведений отклонений значений случайной величины от медианы на соответствующие вероятности будет меньше, чем от любой другой величины:
+
+    $$\sum\limits_{i = 1}^{n} |x_{i} - M_{e}| * p_{i} = min$$
+    \item \textbf{Начальный момент}: $M(x^{k}) = \int\limits_{-\infty}^{\infty} x^{k} f(x) \diff x$
+    
+    Для дискретной случайной величины: $\alpha^{k} = M(x^{k}) = \sum\limits_{k = 1}^{n} x^{k} P_{k}$
+    \item \textbf{Цетральный момент}: $\mu_k = M(x - M(x))^{k} = \int\limits_{-\infty}^{+\infty} (x - M(x))^{k} f(x) \diff x$
+    \item \textbf{Коэффициент ассиметрии}: $A = \frac{\mu_{3}}{\sigma^3}$. Характеризует асимметрию распределения данной случайной величины. Неформально говоря, коэффициент асимметрии положителен, если правый хвост распределения длиннее левого, и отрицателен в противном случае.
+    \item \textbf{Эксцесс}: $E = \frac{\mu^4}{\sigma^4} = -3$ служит для сравнения данного распределения с нормальным распределением. Если эксцесс у распределения положителен, то кривая будет более островершинной. Если эксцесс распределения отрицателен, то пик будет гладким.
+\end{enumerate}
+
+\textbf{Если один из интегралов расходится, то этой случайной величины не существует}.
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1}
+
+Пусть $$f(x) = \begin{cases}
+    0, \ x < -2 \\
+    -\frac{x^{3}}{4}, \ -2 \le x \le 0 \\
+    0, \ x > 0
+\end{cases}$$
+
+Найти \textbf{коэффициент ассиметрии} и \textbf{эксцесс}.
+
+\begin{enumerate}
+    \item \textbf{Коэффициент ассиметрии}. Найдем математическое ожидание:
+    
+    $\alpha_1 = M(x) = \int\limits_{-2}^{0} x (-\frac{x^3}{4}) \diff x = - \frac{x^5}{20} \bigg|_{-2}^{0} = - \frac{32}{20} \approx - 1.6$. 
+    
+    $\alpha_2 = M(x^2) = -\frac{x^6}{24} \bigg|_{-2}^{0} = \frac{64}{24} \approx 2.67$, $\mu_2 = \alpha^2 - \alpha_1^2 = 2.67 - (1.6)^2 \approx 0.11$, $\alpha_3 = -4.57$, $\mu_3=\alpha_3 - 3\alpha_1 \alpha_2 + 2 \alpha_1^3 = 0.05$, $\alpha_4 = 8$, $\mu_4 = \alpha_4 - 4\alpha_1 \alpha_3 + 6\alpha_1^2 \alpha_2 - 3\alpha_1^4 \approx 0.1$
+
+    Теперь можем посчитать коэффициент ассиметрии: $A = \frac{0.05}{\sqrt{0.11}^3} = \frac{0.05}{0.33^3} \approx 1.39$
+    \item \textbf{Эксцесс}. Воспользуемся уже посчитанными в ходе предыдущих вычислений. Получается: $E = \frac{\mu^{4}}{\sigma^4} - 3 = \frac{0.1}{0.33^4} - 3 \approx 5.4$
+\end{enumerate}
+
+\end{document}

@@ -425,4 +425,448 @@ $$
     \item $m_{e} x$ не существует.
 \end{enumerate}
 
+\section{Лекция — 28.10.2023}
+
+\subsection{Дискретные случайные величины}
+
+\subsubsection{Биномиальное распределение}
+
+$P_n(k) = C_n^K p^k q^{n - k}$
+
+\textbf{Закон биномиального распределения}:
+
+$$
+\begin{pmatrix}
+  x & 0 & 1 & \dots & k & & n \\
+  p & q^{n} & n p q^{n - 1} & & C_n^k p^k q^{n - k} & & p^n
+\end{pmatrix}
+$$
+
+$$
+F(x) = \begin{cases}
+    0, \ x \le 0 \\
+    \sum\limits_{k} C_{n}^{k} p^{k} q^{n - k}, \ 0 < x \le n \\
+    1, \ x > n
+\end{cases}
+$$
+
+\textbf{Параметры}: $n$, $p$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}:
+    $M(x) = np$
+    \item \textbf{Дисперсия}:
+    $D(x) = n(1-p)p$
+\end{enumerate}
+
+Если $np \in Z$, то это будет \textbf{наивероятнейшее число успешных испытаний}.
+
+\subsubsection{Пуассоновское распределение}
+
+Если $n \to \infty$, $p \to 0$, $P_n(k) = \frac{\lambda^k}{k!} e^{-\lambda}$, где $\lambda = np$.
+
+\textbf{Закон Пуассоновского распределения}:
+
+$$
+\begin{pmatrix}
+  x & 0 & 1 & \dots & k & & n \\
+  p & e^{-\lambda} & \lambda e^{-\lambda} & & \frac{\lambda^{k}}{k!} e^{-\lambda} & & \frac{\lambda^{n}}{n!} e^{-\lambda}
+\end{pmatrix}
+$$
+
+\textbf{Параметры}: $\lambda$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}:
+    $M(x) = \sum\limits_{k = 0}^{\infty} k \frac{\lambda^{k}}{k!} e^{-\lambda} = \sum\limits_{k = 1}^{\infty} k \frac{\lambda^{k}}{k!} e^{-\lambda} = \lambda e^{-\lambda} \sum\limits_{k = 1}^{\infty} \frac{\lambda^{k - 1}}{(k - 1)!} = \lambda e^{-\lambda} \sum\limits_{k = 0}^{\infty} \frac{\lambda^{k}}{k!} = \lambda e^{-\lambda} e^{\lambda} = \lambda$
+    \item \textbf{Дисперсия}:
+    $D(x) = M(x^2) - (M(x)^2)=\dots=\lambda$
+\end{enumerate}
+
+\subsubsection{Геометрическое распределение}
+
+Рассматривается серия $n$ независимых испытаний, в которых успех появляется с одинаковой вероятностью $p$ и эти испытания \textbf{заканчиваются как только наступает успех}: $P_{k} = (1-p)p^{k - 1}$
+
+\textbf{Закон геометрического распределения}:
+
+$$
+\begin{pmatrix}
+    x & 1 & 2 & \dots & k \\
+    p & p & (1-p)p & \dots & (1-p)^{k - 1}p
+\end{pmatrix}
+$$
+
+\textbf{Параметры}: $p$
+
+\textbf{Числовые характеристики}:
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}: $M(x) = \frac{1}{p}$
+    \item \textbf{Дисперсия}: $D(x) = \frac{1-p}{p^2}$
+\end{enumerate}
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1}
+
+Вероятность того, что электроприбор откажет — 0.15. Сколько часов в среднем прибор отрабатывает до первого сбоя?
+
+\textbf{Ответ}: $M(X) = \frac{1}{0.15} \approx 6.67$ (часов)
+
+\subsection{Непрерывные случайные величины}
+
+\begin{definition}
+    \textbf{Случайная величина $X$ называется непрерывной}, если её функция распределения $F(x)$ является непрерывной.
+\end{definition}
+
+\begin{definition}
+    \textbf{Вероятность того, что случайная величина $X$ примет значение из промежутка} $[a; b)$ равняется приращению функции распределения на этом промежутке:
+
+    $$
+        P(a \le X < b) = F(b) - F(a)
+    $$
+\end{definition}
+
+\subsubsection{Плотность распределения}
+
+\begin{definition}
+    \textbf{Плотностью распределения вероятностей непрерывной случайной величины} называется первая производная её функции распределения, то есть
+
+    $$f(x) = F'(x)$$
+\end{definition}
+
+\paragraph{Свойства плотности распределения}
+
+\begin{enumerate}
+    \item \textbf{Плотность распределения неотрицательная функция}, то есть
+    
+    $$\forall x \in (-\infty; \infty) f(x) > 0$$
+    \item \textbf{Вероятность того, что случайная величина примет какое-либо значение, равняется единице}: 
+    
+    $$\int\limits_{-\infty}^{\infty} f(x) \diff x = 1$$
+    \item $\lim\limits_{x \to \pm \infty} f(x) = 0$
+\end{enumerate}
+
+\paragraph{Пример №1}
+
+Пусть $f(x) = c \arctg x$. При каком $c$ $f(x)$ будет являться плотностью распределения? Рассмотрим $\lim\limits_{x \to \pm \infty} c \arctg x = \pm \frac{c \pi}{2}$. Чтобы это выражение было равно нулю, $c$ должно быть равно нулю. Но интеграл единице ни при каком $c$ не будет равняться. \textbf{Следовательно, $f(x)$ ни при каком $c$ не будет плотностью распределения}.
+
+\subsubsection{Функция распределения}
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item $F'(x) = f(x)$
+        \item $F(x) = \int\limits_{\infty}^{x} f(t) \diff t$
+        \item $\lim\limits_{x \to -\infty} F(x) = 0$
+        \item $\lim\limits_{x \to +\infty} F(x) = 1$
+    \end{enumerate}        
+\end{multicols}
+
+Из этих свойств следует:
+
+$$
+P(\alpha < x < \beta) = F(\beta) - F(\alpha)
+$$
+
+\paragraph{Пример №1}
+
+Найти плотность распредления непрерывной случайной величины, если
+
+$$
+F(x) = \begin{cases}
+    0, \ x \le 0 \\
+    x^2, \ x \in (0; 1] \\
+    1, \ x > 1
+\end{cases}
+$$
+
+Просто, по определению, найдем производные:
+
+$$
+f(x) = \begin{cases}
+  0, \ x \le 0 \\
+  2x, \ x \in (0; 1] \\
+  0, x > 1  
+\end{cases}
+$$
+
+\subsubsection{Числовые характеристики}
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}: $M(x) = \int\limits_{-\infty}^{+\infty} x f(x) \diff x$
+    \item \textbf{Дисперсия}: $D(x) = \int\limits_{-\infty}^{+\infty} (x - M(x))^2 f(x) \diff x$. Но не забываем про то, что мы все так же можем считать по формуле: $D(x) = M(x^2) - M(x)^2$, где $M(x^2) = \int\limits_{-\infty}^{\infty} x^2 f(x) \diff x$
+    \item \textbf{Среднеквадратическое отклонение}: $\sigma(x) = \sqrt{D(x)}$
+    \item \textbf{Модой непрерывной величины} называют то ее значение, которому соответствует максимальное значение функции плотности.
+    \item \textbf{Медианой непрерывной величины} называется её значение, при котором имеет место равенство
+    
+    $$P(X < M_{e}) = P(X > M_{e})$$
+
+    \textbf{Оптимальное свойство медианы}. Сумма произведений отклонений значений случайной величины от медианы на соответствующие вероятности будет меньше, чем от любой другой величины:
+
+    $$\sum\limits_{i = 1}^{n} |x_{i} - M_{e}| * p_{i} = min$$
+    \item \textbf{Начальный момент}: $M(x^{k}) = \int\limits_{-\infty}^{\infty} x^{k} f(x) \diff x$
+    
+    Для дискретной случайной величины: $\alpha^{k} = M(x^{k}) = \sum\limits_{k = 1}^{n} x^{k} P_{k}$
+    \item \textbf{Цетральный момент}: $\mu_k = M(x - M(x))^{k} = \int\limits_{-\infty}^{+\infty} (x - M(x))^{k} f(x) \diff x$
+    \item \textbf{Коэффициент ассиметрии}: $A = \frac{\mu_{3}}{\sigma^3}$. Характеризует асимметрию распределения данной случайной величины. Неформально говоря, коэффициент асимметрии положителен, если правый хвост распределения длиннее левого, и отрицателен в противном случае.
+    \item \textbf{Эксцесс}: $E = \frac{\mu^4}{\sigma^4} = -3$ служит для сравнения данного распределения с нормальным распределением. Если эксцесс у распределения положителен, то кривая будет более островершинной. Если эксцесс распределения отрицателен, то пик будет гладким.
+\end{enumerate}
+
+\textbf{Если один из интегралов расходится, то этой случайной величины не существует}.
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1}
+
+Пусть $$f(x) = \begin{cases}
+    0, \ x < -2 \\
+    -\frac{x^{3}}{4}, \ -2 \le x \le 0 \\
+    0, \ x > 0
+\end{cases}$$
+
+Найти \textbf{коэффициент ассиметрии} и \textbf{эксцесс}.
+
+\begin{enumerate}
+    \item \textbf{Коэффициент ассиметрии}. Найдем математическое ожидание:
+    
+    $\alpha_1 = M(x) = \int\limits_{-2}^{0} x (-\frac{x^3}{4}) \diff x = - \frac{x^5}{20} \bigg|_{-2}^{0} = - \frac{32}{20} \approx - 1.6$. 
+    
+    $\alpha_2 = M(x^2) = -\frac{x^6}{24} \bigg|_{-2}^{0} = \frac{64}{24} \approx 2.67$, $\mu_2 = \alpha^2 - \alpha_1^2 = 2.67 - (1.6)^2 \approx 0.11$, $\alpha_3 = -4.57$, $\mu_3=\alpha_3 - 3\alpha_1 \alpha_2 + 2 \alpha_1^3 = 0.05$, $\alpha_4 = 8$, $\mu_4 = \alpha_4 - 4\alpha_1 \alpha_3 + 6\alpha_1^2 \alpha_2 - 3\alpha_1^4 \approx 0.1$
+
+    Теперь можем посчитать коэффициент ассиметрии: $A = \frac{0.05}{\sqrt{0.11}^3} = \frac{0.05}{0.33^3} \approx 1.39$
+    \item \textbf{Эксцесс}. Воспользуемся уже посчитанными в ходе предыдущих вычислений. Получается: $E = \frac{\mu^{4}}{\sigma^4} - 3 = \frac{0.1}{0.33^4} - 3 \approx 5.4$
+\end{enumerate}
+
+\section{Практическое занятие — 28.10.2023}
+
+\subsection{Непрерывные случайные величины}
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1} В стране пять крупных автогигантов. В кризисных условиях риск того, что завод обанкротится, составляет 30\%. Написать закон распределения автогигантов, которые могут обанкротиться в предстоящий кризисный период. Найти математическое ожидание и дисперсию.
+
+Используем биномиальное распределение, $x$ — количество возможно обанкротившихся заводов:
+
+$$
+\begin{pmatrix}
+  x & 0 & 1 & 2 & 3 & 4 & 5 \\
+  p & 0.7^5 & 5*0.3*0.7^4 & 10*0.3^2*0.7^3 & 10*0.3^3*0.7^2 & 10*0.3^4*0.7 & 0.3^5  \\
+    & 0.168 & 0.36 & 0.31 & 0.132 & 0.028 & 0.002
+\end{pmatrix}
+$$
+
+\begin{enumerate}
+    \item $M(x) = 5 * 0.3 = 1.5$
+    \item $D(x) = 1.05$
+\end{enumerate}
+
+Таким образом, ожидать можно, что штуки две автогигантов рухнут, а чтобы все рухнули — можно не ожидать, \textbf{всё нормально}.
+
+\paragraph{Пример №2} Количество ДТП в городе за неделю является случайной величиной, распределенной согласно Пуассоновскому распределению со средним значением, равным трём. \textbf{Какова вероятность того, что случится меньше трех ДТП}?
+
+$M(x) = \lambda = 3$
+
+$P(x < 3) = P(0) + P(1) + P(2) = e^{-3} (1 + 3 + \frac{9}{2}) \approx 0.42$
+
+\textbf{Ответ:} 0.42
+
+\paragraph{Пример №3}
+
+Пусть $$F(x) = \begin{cases}
+    0, \ x \le 1 \\
+    (x - 1)^2, \ 1 < x \le 2 \\
+    1, \ x > 2
+\end{cases}
+$$
+
+Построить функцию распределения и найти вероятность того, что СВ примет значение
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item Принадлежащее $(1.2; 1.6)$
+        \item Принадлежашее $[1.7; 2.3]$
+        \item Принадлежащее $\{ x: x > 1.5 \}$
+        \item Принадлежащее $\{ x, \ x \le 1.3 \}$
+    \end{enumerate}    
+\end{multicols}
+
+Решение:
+
+\begin{enumerate}
+    \item $P(1.2 < x < 1.6) = F(1.6) - F(1.2) = 0.32$
+    \item \dots
+    \item $P(1.5 < x < +\infty) = 1 - F(1.5) = 1 - 0.25 = 0.75$
+    \item $P(1.3 < x < +\infty) = F(1.3) = 0.09$
+\end{enumerate}
+
+\paragraph{Пример №4}
+
+Пусть $f(x) = \frac{c}{1 + 9x^2}$. Найти значение $c$.
+
+$\int\limits_{-\infty}^{+\infty} \frac{c}{1 + 9x^2} \diff x = 1$
+
+$\int\limits_{-\infty}^{+\infty} \frac{c}{1 + 9x^2} = \lim\limits_{a \to -\infty, b \to +\infty} \int\limits_{a}^{b} \frac{c \diff x}{1 + 9x^2} = \lim\limits_{a \to -\infty, b \to +\infty} \int\limits_{a}^{b} \frac{c}{3} \arctg 3x \bigg|_{a}^{b} = \lim\limits_{a \to -\infty, b \to +\infty} \frac{c}{3} (\arctg 3b - \arctg 3a) = \frac{c}{3} (\frac{\pi}{2} + \frac{\pi}{2}) = \frac{\pi c}{3} = 1 \implies c = \frac{3}{\pi}$
+
+\textbf{Ответ}: $\frac{3}{\pi}$
+
+\paragraph{Пример №5}
+
+Пусть $$f(x) = \begin{cases}
+    0, \ x \le 2 \\
+    2x - 4, \ 2 < x \le 3 \\
+    0, \ x > 3
+\end{cases}$$
+
+Найти $F(x)$:
+
+\begin{enumerate}
+    \item Если $x \in (-\infty; 2]$
+    
+    $F(x) = \int\limits_{-\infty}^{2} 0 \diff t = 0$
+    \item Если $x \in (2; 3]$
+    
+    $F(x) = \int\limits_{2}^{x} (2x - 4) \diff x = (x^2 - 4x) \bigg|_{2}^{x} = x^2 - 4x + 4 = (x-2)^2$
+    \item Если $x \in (3; +\infty)$
+    
+    $F(x) = 1$
+\end{enumerate}
+
+\paragraph{Пример №6}
+
+Пусть $$f(x) = \begin{cases}
+    0, x \le 0 \\
+    2e^{-2x}, \ x > 0 
+\end{cases}$$
+
+Определить \textbf{математическое ожидание}. $M(x) = \int\limits_{-\infty}^{+\infty} x f(x) \diff x = \int\limits_{-\infty}^{0} x 0 \diff x + \int\limits_{0}^{+\infty} x 2 e^{-2x} \diff x = \int\limits_{0}^{+\infty} x e^{-2x} \diff x = \lim\limits_{b \to +\infty} 2 \int\limits_{0}^{b} x e^{-2x} \diff x = \begin{vmatrix}
+    u = x & \diff u = \diff x \\
+    \diff v = 2 e^{-2} \diff x & v = -e^{-2x}
+\end{vmatrix} = \lim\limits_{b \to +\infty} (-x e^{- 2x} \bigg|_0^b + \int\limits_{0}^{b} e^{-2x} \diff x) = \lim\limits_{b \to +\infty} (-b e^{- 2 b} - \frac{1}{2} e^{-2x} \bigg|_{0}^{b}) = \lim\limits_{b \to +\infty} (-b e^{-2 b} - \frac{1}{2} e^{-2b} + \frac{1}{2}) = 0.5$
+
+\paragraph{Пример №7}
+
+Пусть $$f(x) = \begin{cases}
+    0, \ x \le 1 \\
+    -6x^2 + 18x - 12, \ 1 < x < 2 \\
+    0, x \ge 2
+\end{cases}$$
+
+\textbf{Найти}: $M_e x$
+
+Для того, чтобы найти $M_e x$, необходимо найти $F(x)$.
+
+$\int\limits_{1}^{x} (-6x^2 + 18x - 12) \diff x = -2x^3 + 9x^2 - 12 x \bigg|_1^x = -2x^3 + 9x^2 - 12x + 5$
+
+$$F(x) = \begin{cases}
+    0, \ x \le 1 \\
+    -2x^3 + 9x^2 - 12x + 5, \ 1 < x < 2 \\
+    1, \ x \ge 2
+\end{cases}$$
+
+$$-2x^3 + 9x^2 - 12x + 5 = \frac{1}{2}$$
+
+$$x_1 = \frac{3}{2}, x_2 = \frac{3}{2} - \frac{\sqrt{3}}{2}, x_3 = \frac{3}{2} + \frac{\sqrt{3}}{2}$$
+
+\textbf{Ответ}: $\frac{3}{2}$
+
+\subsection{Равномерное распределение}
+
+Говорят, что СВ имеет непрерывное равномерное распределение на отрезке $[ a , b ]$ $[a,b]$, где $a,b \in R$, если её плотность $f_{X}(x)$ имеет вид: 
+
+$$f(x) = \begin{cases}
+    c, \ x \in (a, b) \\
+    0, \ x \notin (a, b)
+\end{cases} = \begin{cases}
+    \frac{1}{b - a}, \ x \in (a, b) \\
+    0, \ x \notin (a, b)
+\end{cases}$$
+
+\subsubsection{Функция распределения}
+
+Интегрируя определённую выше плотность, получаем: 
+
+$$F_x(x) = P(X \le x) = \begin{cases}
+    0, \ x < a \\
+    \frac{x - a}{b - a}, \ a \le x < b \\
+    1, \ x \ge b
+\end{cases}$$
+
+\subsubsection{Числовые характеристики}
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item \textbf{Математическое ожидание:} $M(x) = \frac{a + b}{2}$
+        \item \textbf{Дисперсия}: $D(x) = \frac{(b - a)^2}{12}$
+        \item \textbf{Значение медианы}: $\frac{a + b}{2}$
+        \item \textbf{Значение моды}: любое число из $[a, b]$
+        \item \textbf{Коэффициент асимметрии}: $0$
+        \item \textbf{Эксцесс}: $-\frac{6}{5}$
+    \end{enumerate}    
+\end{multicols}
+
+\subsubsection{Решение задач}
+
+\paragraph{Пример №1} В некотором городе трамвай ходит по расписанию с интервалом 10 минут. Найти вероятность того, что пассажир, подошедший к остановке, будет ожидать трамвай более 2 минут.
+
+\textbf{Ответ:} $P = 0.8$
+
+\paragraph{Пример №2} Обследуются животные, каждое из которых с вероятностью $p$ является больным. Обследование производится путем анализов крови. Если смешать кровь $n$ животных, то анализ этой смеси будет положительным, если среди этих $n$ животных хотя бы одно больное. Требуется обследовать большое число животных $N$. Предлагается несколько способов обследования:
+
+\begin{enumerate}
+    \item \textbf{Обследовать всех этих животных}, проведя $N$ анализов;
+    \item \textbf{Вести обследование по группам}, смешав сначала кровь группы из $n$ животных, если все хорошо — перейти к следующей группе, если нет — сделать анализ каждого из животных.
+\end{enumerate}
+
+\textbf{Определить, какой способ обследования наиболее выгодный} (в плане минимального проведения анализов): первый или второй?
+
+\textbf{Закон распределения для группы животных}:
+
+$$
+\begin{pmatrix}
+    x & 1 & n + 1 \\
+    p & (1-p)^{n} & 1 - (1-p)^{n} 
+\end{pmatrix}
+$$
+
+$M(x_1) = n$
+
+$M(x_2) = (1-p)^{n} + (n + 1)(1 - (1-p)^{n}) = (1-p)^{n} + n - n(1-p)^{n} + 1 - (1-p)^{n} = n - n(1-p)^{n} + 1$
+
+Предполагаем, второй способ выгоднее: $n - n(1-p)^{n} + 1 > n \Longleftrightarrow n(1-p)^{n} < 1$ — \textbf{если это значение меньше единице, используем второй способ; если больше — первый способ}.
+
+\subsection{Домашнее задание}
+
+\paragraph{Задание №1}
+
+Пусть $$F(x) = \begin{cases}
+    0, \ x \le 1 \\
+    (x - 1)^2, \ 1 < x \le 2 \\
+    1, \ x > 2
+\end{cases}
+$$
+
+Построить функцию распределения и найти вероятность того, что СВ примет значение
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item Принадлежашее $[1.7; 2.3]$
+    \end{enumerate}    
+\end{multicols}
+
+\paragraph{Задание №2}
+
+Пусть
+
+$$f(x) = \begin{cases}
+    0, \ x \le 2 \\
+    (x-2)^2, \ 2 < x \le 3 \\
+    1, \ x > 3
+\end{cases}$$
+
+Найти $F(x)$
+
 \end{document}

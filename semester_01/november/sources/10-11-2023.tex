@@ -1,0 +1,216 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{geometry}
+\usepackage{multicol}
+\geometry{
+    left=1cm,right=1cm,top=2cm,bottom=2cm
+}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+
+\newtheorem{definition}{Определение}
+\newtheorem{theorem}{Теорема}
+
+\DeclareMathOperator{\sign}{sign}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black
+}
+
+\title{Теория принятия решений}
+\author{Лисид Лаконский}
+\date{November 2023}
+
+\begin{document}
+\raggedright
+
+\maketitle
+
+\tableofcontents
+\pagebreak
+
+\section{Практическое занятие — 10.11.2023}
+
+\subsection{Непрерывные случайные величины}
+
+\subsubsection{Показательное (экспоненциальное) распределение}
+
+\paragraph{Функция плотности}
+
+$$
+f(x) = \begin{cases}
+    0, \ x < 0 \\
+    \lambda e^{-\lambda x}, x \ge 0
+\end{cases}
+$$
+
+Где $\lambda$ — параметр, являющийся положительной постоянной величиной. Характеризуется временем между независимыми событиями. Широко используется в принятии управленческих решений, прикладных дисциплинах, связанных с экономикой и надежностью работы.
+
+\paragraph{Функция распределения}
+
+Посчитаем для всех интервалов:
+
+\begin{enumerate}
+    \item $\int\limits_{-\infty}^{0} (0) \diff x = 0$
+    \item $\int\limits_{0}^{x} (\lambda e^{-\lambda x}) = (-e^{-\lambda t}) \bigg|_{0}^{x} = 1 - e^{-\lambda x}$
+    \item $0 + \int\limits_{0}^{\infty} \lambda e^{-\lambda x} \diff x = \lim\limits_{b \to +\infty} (e^{-\lambda b} + 1) = 1$
+\end{enumerate}
+
+Из этого имеем:
+
+$$
+F(x) = \begin{cases}
+    0, \ x < 0 \\
+    1 - e^{-\lambda x}, \ x \ge 0
+\end{cases}
+$$
+
+\paragraph{Вероятность попадания случайной величины в заданный интервал}
+
+$P(\alpha < x < \beta) = F(\beta) - F(\alpha) = (1 - e^{-\lambda \beta}) - (1 - e^{-\lambda \alpha}) = e^{-\lambda \alpha} - e^{-\lambda \beta}$ 
+
+\paragraph{Числовые характеристики}
+
+\begin{enumerate}
+    \item \textbf{Математическое ожидание}: $M(x) = \int\limits_{0}^{+\infty} x (\lambda e^{-\lambda x}) \diff x = \begin{vmatrix}
+        u = x \\
+        v = -e^{-\lambda x}   
+       \end{vmatrix} = \lim\limits_{b \to +\infty} = ((- x e^{-\lambda x}) \bigg|_{0}^{b} + \int\limits_{0}^{b} e^{-\lambda x} \diff x) = \lim\limits_{b \to +\infty} (- \frac{1}{\lambda} e^{-\lambda x} \bigg|_{0}^{b}) = \frac{1}{\lambda}
+       $
+    \item \textbf{Дисперсия}: $D(x) = M(x^2) - [M(x)]^2 = \frac{1}{\lambda^2}$
+\end{enumerate}
+
+\paragraph{Решение задач}
+
+\paragraph{Пример №1}
+
+$$
+f(x) = \begin{cases}
+    0, \ x < 0 \\
+    2 e^{-2 x}, \ x \ge 0
+\end{cases}
+$$
+
+$$
+F(x) = \begin{cases}
+    0, \ x < 0 \\
+    1 - e^{-2x}
+\end{cases}
+$$
+
+$P(0.4 < x < 1) = e^{-2 * 0.4} - e^{-2 * 1} \approx 0.449 - 0.135 \approx 0.314$
+
+\textbf{Ответ:} 0.314
+
+\paragraph{Пример №2}
+
+Средняя длительность разговора по телефону составляет 3 минуты. Какова вероятность того, что произвольный телефонный разговор будет длиться от 3 до 6 минут.
+
+$M(x) = 3$
+
+$M(x) = \frac{1}{\lambda} \implies \lambda = \frac{1}{3}$
+
+$P(3 < x < 6) = e^{-\frac{1}{3} * 3} - e^{-\frac{1}{3} * 6} = e^{-1} - e^{-2} \approx 0.232$
+
+\textbf{Ответ:} $0.232$
+
+\paragraph{Пример №2} Деревья в лесу растут в случайных точках, которые образуют пуассоновское поле с плотностью $\lambda$ (среднее число деревьев на ед. площади). Выбирается произвольная точка $O$ в этом лесу. Рассматриваются случайные величины: 
+
+\begin{enumerate}
+    \item $r_1$ — расстояние от точки $O$ до ближайшего дерева;
+    \item $r_2$ — расстояние от точки $O$ до второго по удаленности дерева;
+    \item И так далее
+\end{enumerate}
+
+\textbf{Найти закон распределения каждой из этих случайных величин}.
+
+$$F(x) = 1 - e^{-\pi r^2 \lambda} (r > 0)$$
+
+Плотность:
+
+$$f(x) = \begin{cases}
+    0, \ r < 0 \\
+    2 \pi r \lambda e^{- \pi r^2 \lambda}, \ r \ge 0
+\end{cases}$$
+
+\begin{enumerate}
+    \item $F(r_1) = 1 - e^{- \pi r_1^2 \lambda}$
+    \item $F(r_2) = \dots$ (решение тривиально)
+\end{enumerate}
+
+\paragraph{Пример №3}
+
+Пусть $\lambda = 3$,
+
+$$f(x) = \begin{cases}
+    3e^{-3x}, \ x \ge 0 \\
+    0, \ x < 0
+\end{cases}$$
+
+\begin{enumerate}
+    \item Построить график
+    \item Найти $F(x)$
+
+    $$F(x) = \begin{cases}
+        0, \ x < 0 \\
+        1 - e^{-3x}, x \ge 0
+    \end{cases}$$
+    \item Найти вероятность того, что случайная величина $x$ примет значение меньшее, чем ее математическое ожидание.
+    
+    $M(x) = \frac{1}{3}$
+
+    $P(x < M(x)) = F(\frac{1}{3}) = 1 - e^{-3 \frac{1}{3}} = 1 - e^{-1} = 1 - \frac{1}{e} \approx 0.63$
+\end{enumerate}
+
+\subsubsection{Функция надёжности}
+
+$R(t) = P(x > t) = 1 - F(t)$
+
+Пусть $x$ — длительность безотказной работы, начинающейся с $t_0$, $t$ — момент, в который произошел отказ, $\lambda$ — интенсивность отказов
+
+Определяет отказ работы прибора по показательному закону, где $F(t) = 1 - e^{-\lambda t}$
+
+Следовательно, мы можем переписать: $R(t) = e^{-\lambda t}$
+
+\begin{theorem}
+    Вероятность безотказной работы прибора за время длительностью $t$ не зависит от того, сколько прибор работал до начала рассматриваемого промежутка времени, а зависит только от длительности $t$ и интенсивности $\lambda$.
+
+    \textbf{Доказательство}: Пусть событие $A$ — безотказная работа прибора на интервале от $(0; t_0)$ длительностью времени $t$. Событие $B$ — безотказная работа прибора на интервале от $(t_0; t_0 + 1)$ длительностью времени $t$. Тогда безотказная работа прибора на интервале от $(t_0; t_0 + t)$ длительностью $t_0$ + $t$ — событие $AB$. вероятность которого равняется $e^{-\lambda (t_0 + t)}$
+
+    Вычислим вероятность того, что прибор будет работать безотказно на промежутке $(t_0; t_0 + t)$ при условии, что на предшествующем интервале $(0; t_0)$ он уже проработал безотказно: $P_{A}(B) = \frac{P(AB)}{P(A)} = e^{-\lambda t}$
+\end{theorem}
+
+\paragraph{Решение задач}
+
+\paragraph{Пример №1} Банковская компьютерная система надежности имеет показательное распределение. Какова вероятность того, что вновь установленная система проработает безотказно 100 часов?
+
+$$F(t) = 1 - e^{-0.002 t}, \lambda = 0.002$$
+
+$R(100) = e^{-0.002 * 100} \approx 0.82$
+
+\textbf{Ответ:} $0.82$
+
+\paragraph{Пример №2} Зарядки телефона хватает примерно на 90 часов. Полагая, что время, на которое хватает зарядки телефона, распределено по показательному закону, определить, какой процент телефонов будет работать без подзарядки более 100 часов. Написать функцию распределения и плотность вероятности.
+
+$M(x) = 90$
+
+$M(x) = \frac{1}{\lambda} \implies \lambda = \frac{1}{90}$
+
+$R(100) = e^{-\lambda t} = e^{-\frac{100}{90}} \approx 0.33$
+
+\subsection{Домашнее задание}
+
+\paragraph{Задание №1} Время, в течение которого студент помнит содержание экзаменационных билетов после окончания экзамена распределяется по показательному закону с $\lambda = 0.3$. Какова доля студентов, способных вспомнить содержание экзаменационных билетов через 9 дней после экзамена?
+
+\paragraph{Задание №2} Найти коэффициент асимметрии и эксцесс показательного распределения.
+
+
+\end{document}
